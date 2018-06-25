@@ -1,8 +1,8 @@
 
-var rowDeleteConfirm  = i18next.t('Are you sure you wont to delete this item?');
-var rowsDeleteConfirm = i18next.t('Are you sure you wont to delete selected items?');
-var itemDeleted       = i18next.t('Item deleted');
-var itemsDeleted      = i18next.t('Items deleted');
+var rowDeleteConfirm  = I18N.on('initialized', function(options) { I18N.t('Are you sure you wont to delete this item?')});
+var rowsDeleteConfirm = I18N.on('initialized', function(options) { I18N.t('Are you sure you wont to delete selected items?')});
+var itemDeleted       = I18N.on('initialized', function(options) { I18N.t('Item deleted')});
+var itemsDeleted      = I18N.on('initialized', function(options) { I18N.t('Items deleted')});
 
 function dtRowUpdate(event) {
     var id = $(event.target).closest('tr').attr('id').replace(/\D/g, '');
