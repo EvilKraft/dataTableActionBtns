@@ -5,14 +5,14 @@ var itemDeleted       = I18N.on('initialized', function(options) { I18N.t('Item 
 var itemsDeleted      = I18N.on('initialized', function(options) { I18N.t('Items deleted')});
 
 function dtRowUpdate(event) {
-    var id = $(event.target).closest('tr').attr('id').replace(/\D/g, '');
+    var id = $(event.target).closest('tr').attr('id').replace(/row_(.+)/, "$1");
 
     window.location = window.location.href+'/'+id;
 }
 
 function dtRowDelete(event) {
     var row = $(event.target).closest('tr');
-    var id  = row.attr('id').replace(/\D/g, '');
+    var id  = row.attr('id').replace(/row_(.+)/, "$1");
     var url = window.location.href+'/'+id;
 
     //console.log($(event.delegateTarget).DataTable().row( $(this).closest('tr') ).data());
@@ -46,7 +46,7 @@ function dtRowsDelete(event, dt, node, conf) {
     var selected_ids = rows.ids();
 
     for (index = 0; index < selected_ids.length; ++index) {
-        ids.push(selected_ids[index].replace(/\D/g, ''));
+        ids.push(selected_ids[index].replace(/row_(.+)/, "$1"));
     }
 
     if(ids.length > 0){
@@ -73,7 +73,7 @@ function dtRowsDelete(event, dt, node, conf) {
 }
 
 function dtRowMove(event){
-    var id = $(event.target).closest('tr').attr('id').replace(/\D/g, '');
+    var id = $(event.target).closest('tr').attr('id').replace(/row_(.+)/, "$1");
     var url = window.location.href+'/'+id+'/move';
 
     $.ajax({
