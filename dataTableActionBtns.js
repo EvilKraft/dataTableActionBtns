@@ -1,11 +1,8 @@
 
-var rowDeleteConfirm  = I18N.on('initialized', function(options) {
-    return 'zzz';
- //   I18N.t('Are you sure you wont to delete this item?')
-});
-var rowsDeleteConfirm = I18N.on('initialized', function(options) { return I18N.t('Are you sure you wont to delete selected items?')});
-var itemDeleted       = I18N.on('initialized', function(options) { return I18N.t('Item deleted')});
-var itemsDeleted      = I18N.on('initialized', function(options) { return I18N.t('Items deleted')});
+var rowDeleteConfirm  = i18next.t('Are you sure you wont to delete this iteccccm?');
+var rowsDeleteConfirm = i18next.t('Are you sure you wont to delete selected items?');
+var itemDeleted       = i18next.t('Item deleted');
+var itemsDeleted      = i18next.t('Items deleted');
 
 function dtRowUpdate(event) {
     var id = $(event.target).closest('tr').attr('id').replace(/row_(.+)/, "$1");
