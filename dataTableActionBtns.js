@@ -1,8 +1,11 @@
 
-var rowDeleteConfirm  = I18N.on('initialized', function(options) { I18N.t('Are you sure you wont to delete this item?')});
-var rowsDeleteConfirm = I18N.on('initialized', function(options) { I18N.t('Are you sure you wont to delete selected items?')});
-var itemDeleted       = I18N.on('initialized', function(options) { I18N.t('Item deleted')});
-var itemsDeleted      = I18N.on('initialized', function(options) { I18N.t('Items deleted')});
+var rowDeleteConfirm  = I18N.on('initialized', function(options) {
+    return 'zzz';
+ //   I18N.t('Are you sure you wont to delete this item?')
+});
+var rowsDeleteConfirm = I18N.on('initialized', function(options) { return I18N.t('Are you sure you wont to delete selected items?')});
+var itemDeleted       = I18N.on('initialized', function(options) { return I18N.t('Item deleted')});
+var itemsDeleted      = I18N.on('initialized', function(options) { return I18N.t('Items deleted')});
 
 function dtRowUpdate(event) {
     var id = $(event.target).closest('tr').attr('id').replace(/row_(.+)/, "$1");
@@ -15,16 +18,13 @@ function dtRowDelete(event) {
     var id  = row.attr('id').replace(/row_(.+)/, "$1");
     var url = window.location.href+'/'+id;
 
-    //console.log($(event.delegateTarget).DataTable().row( $(this).closest('tr') ).data());
-    //console.log(tableData.row( '#row_'+rowId ).data());
-
     if (confirm(rowDeleteConfirm)){
         $.ajax({
             url: url,
             type: "DELETE",
             dataType: "json",
         }).done(function(data, textStatus, jqXHR) {
-            if(result.status == 1){
+            if(data.status == 1){
                 $(event.delegateTarget).DataTable().row(row).remove().draw();
 
                 appendAlert('success', itemDeleted);
@@ -56,7 +56,7 @@ function dtRowsDelete(event, dt, node, conf) {
                 type: "DELETE",
                 dataType: "json",
             }).done(function(data, textStatus, jqXHR) {
-                if(result.status == 1){
+                if(data.status == 1){
                     rows.remove().draw();
 
                     appendAlert('success', itemsDeleted);
@@ -103,8 +103,8 @@ jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
         for (i = 0; i < actions.length; ++i) {
             switch (actions[i]){
                 case 'create' : new_data += ''; break;
-                case 'update' : new_data += '<i class="dtRowUpdate fa fa-edit fa-lg"   title="'+api.i18n('buttons.edit', 'Edit')+'"></i>';break;
-                case 'delete' : new_data += '<i class="dtRowDelete fa fa-remove fa-lg" title="'+api.i18n('buttons.delete', 'Delete')+'"></i>';break;
+                case 'update' : new_data += '<i class="dtRowUpdate fa fa-edit fa-lg"   title="'+api.i18n('buttons.edit', 'Edit')+'"></i>'; break;
+                case 'delete' : new_data += '<i class="dtRowDelete fa fa-remove fa-lg" title="'+api.i18n('buttons.delete', 'Delete')+'"></i>'; break;
                 case 'move'   :
                     new_data += '<i class="dtRowMoveUp   fa fa-arrow-up   fa-lg" title="'+api.i18n('buttons.moveUp', 'Move up')+'"></i>';
                     new_data += '<i class="dtRowMoveDown fa fa-arrow-down fa-lg" title="'+api.i18n('buttons.moveDown', 'Move down')+'"></i>';
@@ -182,8 +182,8 @@ jQuery.fn.dataTable.ext.buttons.delete = {
 $(document).on( 'init.dt', function ( e, settings ) {
     var api = new $.fn.dataTable.Api( settings );
 
-    api.$('.dtRowUpdate').on('click', dtRowUpdate);
-    api.$('.dtRowDelete').on('click', dtRowDelete);
-    api.$('.dtRowMoveUp').on('click',  {direction: 'up'},   dtRowMove);
-    api.$('.dtRowMoveDown').on('click', {direction: 'down'}, dtRowMove);
+    $(e.target).on('click', '.dtRowUpdate', dtRowUpdate);
+    $(e.target).on('click', '.dtRowDelete', dtRowDelete);
+    $(e.target).on('click', '.dtRowMoveUp',   {direction: 'up'},   dtRowMove);
+    $(e.target).on('click', '.dtRowMoveDown', {direction: 'down'}, dtRowMove);
 } );
