@@ -1,5 +1,5 @@
 
-var rowDeleteConfirm  = i18next.t('Are you sure you wont to delete this iteccccm?');
+var rowDeleteConfirm  = i18next.t('Are you sure you wont to delete this item?');
 var rowsDeleteConfirm = i18next.t('Are you sure you wont to delete selected items?');
 var itemDeleted       = i18next.t('Item deleted');
 var itemsDeleted      = i18next.t('Items deleted');
@@ -8,6 +8,12 @@ function dtRowUpdate(event) {
     var id = $(event.target).closest('tr').attr('id').replace(/row_(.+)/, "$1");
 
     window.location = window.location.href+'/'+id;
+}
+
+function dtRowChild(event) {
+    var id = $(event.target).closest('tr').attr('id').replace(/row_(.+)/, "$1");
+
+    window.location = window.location.href+'/'+id+'/add-child';
 }
 
 function dtRowDelete(event) {
@@ -99,10 +105,12 @@ jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
 
         for (i = 0; i < actions.length; ++i) {
             switch (actions[i]){
-                case 'create' : new_data += ''; break;
-                case 'update' : new_data += '<i class="dtRowUpdate fa fa-edit fa-lg"   title="'+api.i18n('buttons.edit', 'Edit')+'"></i>'; break;
-                case 'delete' : new_data += '<i class="dtRowDelete fa fa-remove fa-lg" title="'+api.i18n('buttons.delete', 'Delete')+'"></i>'; break;
-                case 'move'   :
+                case 'create'    : new_data += ''; break;
+                case 'update'    : new_data += '<i class="dtRowUpdate fa fa-edit   fa-lg" title="'+api.i18n('buttons.edit',     'Edit')+'"></i>';      break;
+                case 'delete'    : new_data += '<i class="dtRowDelete fa fa-remove fa-lg" title="'+api.i18n('buttons.delete',   'Delete')+'"></i>';    break;
+                case 'addChild'  : new_data += '<i class="dtRowChild  fa fa-plus   fa-lg" title="'+api.i18n('buttons.addChild', 'Add child')+'"></i>'; break;
+
+                case 'move'          :
                     new_data += '<i class="dtRowMoveUp   fa fa-arrow-up   fa-lg" title="'+api.i18n('buttons.moveUp', 'Move up')+'"></i>';
                     new_data += '<i class="dtRowMoveDown fa fa-arrow-down fa-lg" title="'+api.i18n('buttons.moveDown', 'Move down')+'"></i>';
                     break;
@@ -181,6 +189,7 @@ $(document).on( 'init.dt', function ( e, settings ) {
 
     $(e.target).on('click', '.dtRowUpdate', dtRowUpdate);
     $(e.target).on('click', '.dtRowDelete', dtRowDelete);
+    $(e.target).on('click', '.dtRowChild',  dtRowChild);
     $(e.target).on('click', '.dtRowMoveUp',   {direction: 'up'},   dtRowMove);
     $(e.target).on('click', '.dtRowMoveDown', {direction: 'down'}, dtRowMove);
 } );
