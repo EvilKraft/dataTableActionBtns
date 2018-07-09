@@ -13,7 +13,7 @@ function dtRowUpdate(event) {
 function dtRowChild(event) {
     var id = $(event.target).closest('tr').attr('id').replace(/row_(.+)/, "$1");
 
-    window.location = window.location.href+'/'+id+'/add-child';
+    window.location = window.location.href+'/'+id+'/new';
 }
 
 function dtRowDelete(event) {
