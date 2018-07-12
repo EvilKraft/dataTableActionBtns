@@ -99,25 +99,38 @@ function dtRowMove(event){
 
 jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
     return function ( data, type, row, meta ) {
-        var api = new $.fn.dataTable.Api( meta.settings );
+        if (type !== 'display') {
+            return data;
+        }
 
-        var new_data = '';
+        var api = new $.fn.dataTable.Api( meta.settings );
+        var newData = '';
 
         for (i = 0; i < actions.length; ++i) {
             switch (actions[i]){
-                case 'create'    : new_data += ''; break;
-                case 'update'    : new_data += '<i class="dtRowUpdate fa fa-edit   fa-lg" title="'+api.i18n('buttons.edit',     'Edit')+'"></i>';      break;
-                case 'delete'    : new_data += '<i class="dtRowDelete fa fa-remove fa-lg" title="'+api.i18n('buttons.delete',   'Delete')+'"></i>';    break;
-                case 'addChild'  : new_data += '<i class="dtRowChild  fa fa-plus   fa-lg" title="'+api.i18n('buttons.addChild', 'Add child')+'"></i>'; break;
+                case 'create'    : newData += ''; break;
+                case 'update'    : newData += '<i class="dtRowUpdate fa fa-edit   fa-lg"            title="'+api.i18n('buttons.edit',     'Edit')+'"></i>';      break;
+                case 'delete'    : newData += '<i class="dtRowDelete fa fa-remove fa-lg text-red"   title="'+api.i18n('buttons.delete',   'Delete')+'"></i>';    break;
+                case 'addChild'  : newData += '<i class="dtRowChild  fa fa-plus   fa-lg text-green" title="'+api.i18n('buttons.addChild', 'Add child')+'"></i>'; break;
 
-                case 'move'          :
-                    new_data += '<i class="dtRowMoveUp   fa fa-arrow-up   fa-lg" title="'+api.i18n('buttons.moveUp', 'Move up')+'"></i>';
-                    new_data += '<i class="dtRowMoveDown fa fa-arrow-down fa-lg" title="'+api.i18n('buttons.moveDown', 'Move down')+'"></i>';
+                case 'move'      :
+                    if(meta.row == 0 || data.isFirst == 1){
+                        newData += '<i class="fa fa-arrow-up fa-lg text-gray" style="cursor: default;"></i>';
+                    }else{
+                        newData += '<i class="fa fa-arrow-up fa-lg dtRowMoveUp" title="'+api.i18n('buttons.moveUp', 'Move up')+'"></i>';
+                    }
+
+                    if(meta.row == meta.settings._iRecordsTotal - 1 || data.isLast == 1){
+                        newData += '<i class="fa fa-arrow-down fa-lg text-gray" style="cursor: default;"></i>';
+                    }else{
+                        newData += '<i class="fa fa-arrow-down fa-lg dtRowMoveDown" title="'+api.i18n('buttons.moveDown', 'Move down')+'"></i>';
+                    }
+
                     break;
             }
         }
 
-        return new_data;
+        return newData;
     };
 };
 
