@@ -1,0 +1,13 @@
+{
+	"name": "EvilKraft/dataTableActionBtns",
+	"type": "datatable-plugin",
+	"description": "Action buttons for datatable",
+	"keywords": ["datatable"],
+	"license": "GPL-2.0+",
+	"homepage": "https://github.com/EvilKraft/dataTableActionBtns",
+	"support": {
+	  "issues": "https://github.com/EvilKraft/dataTableActionBtns/issues",
+	  "source": "https://github.com/EvilKraft/dataTableActionBtns"
+	},
+	"require": { }
+}
