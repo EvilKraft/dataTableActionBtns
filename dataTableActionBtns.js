@@ -105,7 +105,7 @@ jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
         for (i = 0; i < actions.length; ++i) {
             switch (actions[i]){
                 case 'create'    : newData += ''; break;
-                case 'update'    : newData += '<i class="dtRowUpdate fa fa-edit   fa-lg"              title="'+api.i18n('buttons.edit',     'Edit')+'"></i>';      break;
+                case 'update'    : newData += '<i class="dtRowUpdate fa fa-edit   fa-lg text-primary" title="'+api.i18n('buttons.edit',     'Edit')+'"></i>';      break;
                 case 'delete'    : newData += '<i class="dtRowDelete fa fa-remove fa-lg text-danger"  title="'+api.i18n('buttons.delete',   'Delete')+'"></i>';    break;
                 case 'addChild'  : newData += '<i class="dtRowChild  fa fa-plus   fa-lg text-success" title="'+api.i18n('buttons.addChild', 'Add child')+'"></i>'; break;
 
@@ -135,7 +135,7 @@ jQuery.fn.dataTable.ext.buttons.create = {
     titleAttr: function ( dt ) {
         return dt.i18n( 'buttons.create', 'Add new item');
     },
-    className: 'text-green',
+    className: 'text-success',
     action: function ( e, dt, node, config ) {
         window.location = window.location.href+'/new';
     }
@@ -146,7 +146,7 @@ jQuery.fn.dataTable.ext.buttons.delete = {
     titleAttr: function ( dt ) {
         return dt.i18n( 'buttons.deleteItems', 'Delete items');
     },
-    className: 'text-red',
+    className: 'text-danger',
     action: function ( e, dt, node, conf ) {
         dtRowsDelete(e, dt, node, conf);
     },
