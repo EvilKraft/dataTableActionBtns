@@ -105,9 +105,9 @@ jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
         for (i = 0; i < actions.length; ++i) {
             switch (actions[i]){
                 case 'create'    : newData += ''; break;
-                case 'update'    : newData += '<i class="dtRowUpdate fa fa-edit   fa-lg"            title="'+api.i18n('buttons.edit',     'Edit')+'"></i>';      break;
-                case 'delete'    : newData += '<i class="dtRowDelete fa fa-remove fa-lg text-red"   title="'+api.i18n('buttons.delete',   'Delete')+'"></i>';    break;
-                case 'addChild'  : newData += '<i class="dtRowChild  fa fa-plus   fa-lg text-green" title="'+api.i18n('buttons.addChild', 'Add child')+'"></i>'; break;
+                case 'update'    : newData += '<i class="dtRowUpdate fa fa-edit   fa-lg"              title="'+api.i18n('buttons.edit',     'Edit')+'"></i>';      break;
+                case 'delete'    : newData += '<i class="dtRowDelete fa fa-remove fa-lg text-danger"  title="'+api.i18n('buttons.delete',   'Delete')+'"></i>';    break;
+                case 'addChild'  : newData += '<i class="dtRowChild  fa fa-plus   fa-lg text-success" title="'+api.i18n('buttons.addChild', 'Add child')+'"></i>'; break;
 
                 case 'move'      :
                     if(meta.row == 0 || data.isFirst == 1){
