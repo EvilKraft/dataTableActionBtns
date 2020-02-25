@@ -1,3 +1,14 @@
+var style = document.createElement('style');
+style.innerHTML = `
+  .dtRowCreate::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f067";}
+  .dtRowUpdate::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 400; content: "\\f044";}
+  .dtRowDelete::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f1f8";}
+  .dtRowChild::before  {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f067";}
+  .dtRowMoveUp::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f062";}
+  .dtRowMoveDn::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f063";}
+`;
+document.head.appendChild(style);
+
 
 function dtRowDelete(event) {
     event.preventDefault();
@@ -100,16 +111,16 @@ jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
         for (i = 0; i < actions.length; ++i) {
             switch (actions[i]){
                 case 'create'    : break;
-                case 'update'    : newData += '<a href="'+url+'"     class="btn btn-link text-primary dtRowUpdate" title="'+api.i18n('buttons.edit', 'Edit')+'"><i class="fa fa-edit fa-lg"></i></a>';            break;
-                case 'delete'    : newData += '<button               class="btn btn-link text-danger  dtRowDelete" title="'+api.i18n('buttons.delete', 'Delete')+'"><i class="fa fa-remove fa-lg"></i></button>'; break;
-                case 'addChild'  : newData += '<a href="'+url+'/new" class="btn btn-link text-success dtRowChild"  title="'+api.i18n('buttons.addChild', 'Add child')+'"><i class="fa fa-plus fa-lg"></i></a>';   break;
+                case 'update'    : newData += '<a href="'+url+'"     class="btn btn-link text-primary dtRowUpdate" title="'+api.i18n('buttons.edit', 'Edit')+'"></a>';          break;
+                case 'delete'    : newData += '<button               class="btn btn-link text-danger  dtRowDelete" title="'+api.i18n('buttons.delete', 'Delete')+'"></button>'; break;
+                case 'addChild'  : newData += '<a href="'+url+'/new" class="btn btn-link text-success dtRowChild"  title="'+api.i18n('buttons.addChild', 'Add child')+'"></a>'; break;
 
                 case 'move'      :
-                    var mvUpClass = (meta.row == 0 || data.isFirst == 1)                               ? 'disabled' : 'dtRowMoveUp';
-                    var mvDnClass = (meta.row == meta.settings._iRecordsTotal - 1 || data.isLast == 1) ? 'disabled' : 'dtRowMoveDn';
+                    var mvUpClass = (meta.row == 0 || data.isFirst == 1)                               ? 'dtRowMoveUp disabled' : 'dtRowMoveUp';
+                    var mvDnClass = (meta.row == meta.settings._iRecordsTotal - 1 || data.isLast == 1) ? 'dtRowMoveDn disabled' : 'dtRowMoveDn';
 
-                    newData += '<button class="btn btn-link '+mvUpClass+'" title="'+api.i18n('buttons.moveUp', 'Move up')+'">  <i class="fa fa-arrow-up   fa-lg"></i></button>';
-                    newData += '<button class="btn btn-link '+mvDnClass+'" title="'+api.i18n('buttons.moveDn', 'Move down')+'"><i class="fa fa-arrow-down fa-lg"></i></button>';
+                    newData += '<button class="btn btn-link '+mvUpClass+'" title="'+api.i18n('buttons.moveUp', 'Move up')+'"></button>';
+                    newData += '<button class="btn btn-link '+mvDnClass+'" title="'+api.i18n('buttons.moveDn', 'Move down')+'"></button>';
 
                     break;
             }
@@ -120,22 +131,22 @@ jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
 };
 
 jQuery.fn.dataTable.ext.buttons.create = {
-    text: '<i class="fa fa-plus fa-lg"></i>',
+  //  text: '',
     titleAttr: function ( dt ) {
         return dt.i18n( 'buttons.create', 'Add new item');
     },
-    className: 'text-success',
+    className: 'text-success dtRowCreate',
     action: function ( e, dt, node, config ) {
         window.location = window.location.href+'/new';
     }
 };
 
 jQuery.fn.dataTable.ext.buttons.delete = {
-    text: '<i class="fa fa-trash fa-lg"></i>',
+//    text: '',
     titleAttr: function ( dt ) {
         return dt.i18n( 'buttons.deleteItems', 'Delete items');
     },
-    className: 'text-danger',
+    className: 'text-danger dtRowDelete',
     action: function ( e, dt, node, conf ) {
         dtRowsDelete(e, dt, node, conf);
     },
