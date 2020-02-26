@@ -1,6 +1,8 @@
 var style = document.createElement('style');
 style.innerHTML = `
-  .dtRowCreate::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f067";}
+  .dtCreateBtn::before {font-family: "Font Awesome 5 Free"; font-size: 1em;    font-weight: 900; content: "\\f067";}
+  .dtDeleteBtn::before {font-family: "Font Awesome 5 Free"; font-size: 1em;    font-weight: 900; content: "\\f1f8";}
+  
   .dtRowUpdate::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 400; content: "\\f044";}
   .dtRowDelete::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f1f8";}
   .dtRowChild::before  {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f067";}
@@ -135,7 +137,7 @@ jQuery.fn.dataTable.ext.buttons.create = {
     titleAttr: function ( dt ) {
         return dt.i18n( 'buttons.create', 'Add new item');
     },
-    className: 'text-success dtRowCreate',
+    className: 'text-success dtCreateBtn',
     action: function ( e, dt, node, config ) {
         window.location = window.location.href+'/new';
     }
@@ -146,7 +148,7 @@ jQuery.fn.dataTable.ext.buttons.delete = {
     titleAttr: function ( dt ) {
         return dt.i18n( 'buttons.deleteItems', 'Delete items');
     },
-    className: 'text-danger dtRowDelete',
+    className: 'text-danger dtDeleteBtn',
     action: function ( e, dt, node, conf ) {
         dtRowsDelete(e, dt, node, conf);
     },
