@@ -1,13 +1,13 @@
 var style = document.createElement('style');
 style.innerHTML = `
-  .dtCreateBtn::before {font-family: "Font Awesome 5 Free"; font-size: 1em;    font-weight: 900; content: "\\f067";}
-  .dtDeleteBtn::before {font-family: "Font Awesome 5 Free"; font-size: 1em;    font-weight: 900; content: "\\f1f8";}
+    .dtCreateBtn::before {font-family: "Font Awesome 5 Free"; font-size: 1em;    font-weight: 900; content: "\\f067";}
+    .dtDeleteBtn::before {font-family: "Font Awesome 5 Free"; font-size: 1em;    font-weight: 900; content: "\\f1f8";}
   
-  .dtRowUpdate::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 400; content: "\\f044";}
-  .dtRowDelete::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f1f8";}
-  .dtRowChild::before  {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f067";}
-  .dtRowMoveUp::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f062";}
-  .dtRowMoveDn::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f063";}
+    .dtRowUpdate::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 400; content: "\\f044";}
+    .dtRowDelete::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f1f8";}
+    .dtRowChild::before  {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f067";}
+    .dtRowMoveUp::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f062";}
+    .dtRowMoveDn::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f063";}
 `;
 document.head.appendChild(style);
 
