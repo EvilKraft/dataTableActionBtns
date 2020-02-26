@@ -1,13 +1,13 @@
 var style = document.createElement('style');
 style.innerHTML = `
-    .dtCreateBtn::before {font-family: "Font Awesome 5 Free"; font-size: 1em;    font-weight: 900; content: "\\f067";}
-    .dtDeleteBtn::before {font-family: "Font Awesome 5 Free"; font-size: 1em;    font-weight: 900; content: "\\f1f8";}
+    .dtCreateBtn::before {font-family: "Font Awesome 5 Free"; content: "\\f067"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.0667em;}
+    .dtDeleteBtn::before {font-family: "Font Awesome 5 Free"; content: "\\f1f8"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.0667em;}
   
-    .dtRowUpdate::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 400; content: "\\f044";}
-    .dtRowDelete::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f1f8";}
-    .dtRowChild::before  {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f067";}
-    .dtRowMoveUp::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f062";}
-    .dtRowMoveDn::before {font-family: "Font Awesome 5 Free"; font-size: 1.33em; font-weight: 900; content: "\\f063";}
+    .dtRowUpdate::before {font-family: "Font Awesome 5 Free"; content: "\\f044"; font-weight: 400; font-size: 1.33em; line-height: .75em; vertical-align: -.1667em;}
+    .dtRowDelete::before {font-family: "Font Awesome 5 Free"; content: "\\f1f8"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.1667em;}
+    .dtRowChild::before  {font-family: "Font Awesome 5 Free"; content: "\\f067"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.1667em;}
+    .dtRowMoveUp::before {font-family: "Font Awesome 5 Free"; content: "\\f062"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.1667em;}
+    .dtRowMoveDn::before {font-family: "Font Awesome 5 Free"; content: "\\f063"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.1667em;}
 `;
 document.head.appendChild(style);
 
