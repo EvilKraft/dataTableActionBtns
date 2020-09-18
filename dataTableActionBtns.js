@@ -113,16 +113,16 @@ jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
         for (i = 0; i < actions.length; ++i) {
             switch (actions[i]){
                 case 'create'    : break;
-                case 'update'    : newData += '<a href="'+url+'"     class="btn btn-link text-primary dtRowUpdate" title="'+api.i18n('buttons.edit', 'Edit')+'"></a>';          break;
-                case 'delete'    : newData += '<button               class="btn btn-link text-danger  dtRowDelete" title="'+api.i18n('buttons.delete', 'Delete')+'"></button>'; break;
-                case 'addChild'  : newData += '<a href="'+url+'/new" class="btn btn-link text-success dtRowChild"  title="'+api.i18n('buttons.addChild', 'Add child')+'"></a>'; break;
+                case 'update'    : newData += '<a href="'+url+'"     class="btn btn-link text-decoration-none text-primary dtRowUpdate" title="'+api.i18n('buttons.edit', 'Edit')+'"></a>';          break;
+                case 'delete'    : newData += '<button               class="btn btn-link text-decoration-none text-danger  dtRowDelete" title="'+api.i18n('buttons.delete', 'Delete')+'"></button>'; break;
+                case 'addChild'  : newData += '<a href="'+url+'/new" class="btn btn-link text-decoration-none text-success dtRowChild"  title="'+api.i18n('buttons.addChild', 'Add child')+'"></a>'; break;
 
                 case 'move'      :
                     var mvUpClass = (meta.row == 0 || data.isFirst == 1)                               ? 'dtRowMoveUp disabled' : 'dtRowMoveUp';
                     var mvDnClass = (meta.row == meta.settings._iRecordsTotal - 1 || data.isLast == 1) ? 'dtRowMoveDn disabled' : 'dtRowMoveDn';
 
-                    newData += '<button class="btn btn-link '+mvUpClass+'" title="'+api.i18n('buttons.moveUp', 'Move up')+'"></button>';
-                    newData += '<button class="btn btn-link '+mvDnClass+'" title="'+api.i18n('buttons.moveDn', 'Move down')+'"></button>';
+                    newData += '<button class="btn btn-link text-decoration-none '+mvUpClass+'" title="'+api.i18n('buttons.moveUp', 'Move up')+'"></button>';
+                    newData += '<button class="btn btn-link text-decoration-none '+mvDnClass+'" title="'+api.i18n('buttons.moveDn', 'Move down')+'"></button>';
 
                     break;
             }
