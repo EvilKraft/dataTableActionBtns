@@ -1,13 +1,17 @@
-var style = document.createElement('style');
+style = document.createElement('style');
 style.innerHTML = `
-    .dtCreateBtn::before {font-family: "Font Awesome 5 Free"; content: "\\f067"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.0667em;}
-    .dtDeleteBtn::before {font-family: "Font Awesome 5 Free"; content: "\\f1f8"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.0667em;}
+    .dtCreateBtn::before, .dtDeleteBtn::before, .dtRowUpdate::before, .dtRowDelete::before, .dtRowChild::before, .dtRowMoveUp::before, .dtRowMoveDn::before{
+        font-family: "Font Awesome 5 Free"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.0667em;
+    }
+    
+    .dtCreateBtn::before {content: "\\f067";}
+    .dtDeleteBtn::before {content: "\\f1f8";}
   
-    .dtRowUpdate::before {font-family: "Font Awesome 5 Free"; content: "\\f044"; font-weight: 400; font-size: 1.33em; line-height: .75em; vertical-align: -.1667em;}
-    .dtRowDelete::before {font-family: "Font Awesome 5 Free"; content: "\\f1f8"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.1667em;}
-    .dtRowChild::before  {font-family: "Font Awesome 5 Free"; content: "\\f067"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.1667em;}
-    .dtRowMoveUp::before {font-family: "Font Awesome 5 Free"; content: "\\f062"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.1667em;}
-    .dtRowMoveDn::before {font-family: "Font Awesome 5 Free"; content: "\\f063"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.1667em;}
+    .dtRowUpdate::before {content: "\\f044"; font-weight: 400;}
+    .dtRowDelete::before {content: "\\f1f8";}
+    .dtRowChild::before  {content: "\\f067";}
+    .dtRowMoveUp::before {content: "\\f062";}
+    .dtRowMoveDn::before {content: "\\f063";}
 `;
 document.head.appendChild(style);
 
@@ -16,24 +20,22 @@ function dtRowDelete(event) {
     event.preventDefault();
     $(event.target).closest('a').blur();
 
-
-    var row = $(event.target).closest('tr');
-    var id  = row.attr('id').replace(/row_(.+)/, "$1");
-    var url = window.location.href+'/'+id;
-    var api = $(event.delegateTarget).DataTable();
+    let row = $(event.target).closest('tr');
+    let id  = row.attr('id').replace(/row_(.+)/, "$1");
+    let api = $(event.delegateTarget).DataTable();
 
     if (confirm(api.i18n('buttons.rowDeleteConfirm', 'Are you sure you wont to delete this item?'))){
         $.ajax({
-            url: url,
+            url: window.location.href+'/'+id,
             type: "DELETE",
             dataType: "json",
         }).done(function(data, textStatus, jqXHR) {
-            if(data.status == 1){
+            if(data.status === 1){
                 api.row(row).remove().draw();
 
                 appendAlert('success', api.i18n('buttons.itemDeleted', 'Item deleted'));
             }else{
-                result.errors.forEach(function(error, i, arr) {
+                data.errors.forEach(function(error, i, arr) {
                     appendAlert('error', error.message);
                 });
             }
@@ -44,28 +46,27 @@ function dtRowDelete(event) {
 }
 
 function dtRowsDelete(event, dt, node, conf) {
-    var ids = [];
-    var url = window.location.href;
-    var rows         = dt.rows('.selected');
-    var selected_ids = rows.ids();
+    let ids            = [];
+    let rows           = dt.rows('.selected');
+    const selected_ids = rows.ids();
 
-    for (index = 0; index < selected_ids.length; ++index) {
+    for (let index = 0; index < selected_ids.length; ++index) {
         ids.push(selected_ids[index].replace(/row_(.+)/, "$1"));
     }
 
     if(ids.length > 0){
         if(confirm(dt.i18n('buttons.rowsDeleteConfirm', 'Are you sure you wont to delete selected items?'))){
             $.ajax({
-                url: url+"/"+ids.join(','),
+                url: window.location.href+"/"+ids.join(','),
                 type: "DELETE",
                 dataType: "json",
             }).done(function(data, textStatus, jqXHR) {
-                if(data.status == 1){
+                if(data.status === 1){
                     rows.remove().draw();
 
                     appendAlert('success', dt.i18n('buttons.itemsDeleted', 'Items deleted'));
                 }else{
-                    result.errors.forEach(function(error, i, arr) {
+                    data.errors.forEach(function(error, i, arr) {
                         appendAlert('error', error.message);
                     });
                 }
@@ -77,16 +78,15 @@ function dtRowsDelete(event, dt, node, conf) {
 }
 
 function dtRowMove(event){
-    var id = $(event.target).closest('tr').attr('id').replace(/row_(.+)/, "$1");
-    var url = window.location.href+'/'+id+'/move';
+    const id = $(event.target).closest('tr').attr('id').replace(/row_(.+)/, "$1");
 
     $.ajax({
-        url: url,
+        url: window.location.href+'/'+id+'/move',
         type: "PUT",
         dataType: "json",
         data: {direction: event.data.direction}
     }).done(function(data, textStatus, jqXHR) {
-        if(data.status == 1){
+        if(data.status === 1){
             $(event.delegateTarget).DataTable().draw();
         }else{
             data.errors.forEach(function(error, i, arr) {
@@ -100,17 +100,22 @@ function dtRowMove(event){
 
 jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
     return function ( data, type, row, meta ) {
-        if (type !== 'display') {
+        if(type !== 'display') {
             return data;
         }
 
-        var id = data['DT_RowId'].replace(/row_(.+)/, "$1");
-        var url = window.location.href+'/'+id;
+        if(meta.settings.bDrawing === false){
+            return data;
+        }
 
-        var api = new $.fn.dataTable.Api( meta.settings );
-        var newData = '';
+        const isFirst = meta.row === 0;
+        const isLast  = meta.row === meta.settings.json.recordsTotal - 1;
+        const id      = data['DT_RowId'].replace(/row_(.+)/, "$1");
+        const url     = window.location.href + '/' + id;
+        const api     = new $.fn.dataTable.Api(meta.settings);
+        let newData = '';
 
-        for (i = 0; i < actions.length; ++i) {
+        for (let i = 0; i < actions.length; ++i) {
             switch (actions[i]){
                 case 'create'    : break;
                 case 'update'    : newData += '<a href="'+url+'"     class="btn btn-link text-decoration-none text-primary dtRowUpdate" title="'+api.i18n('buttons.edit', 'Edit')+'"></a>';          break;
@@ -118,8 +123,8 @@ jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
                 case 'addChild'  : newData += '<a href="'+url+'/new" class="btn btn-link text-decoration-none text-success dtRowChild"  title="'+api.i18n('buttons.addChild', 'Add child')+'"></a>'; break;
 
                 case 'move'      :
-                    var mvUpClass = (meta.row == 0 || data.isFirst == 1)                               ? 'dtRowMoveUp disabled' : 'dtRowMoveUp';
-                    var mvDnClass = (meta.row == meta.settings._iRecordsTotal - 1 || data.isLast == 1) ? 'dtRowMoveDn disabled' : 'dtRowMoveDn';
+                    const mvUpClass = (meta.row === 0 || isFirst === true)                               ? 'dtRowMoveUp disabled' : 'dtRowMoveUp';
+                    const mvDnClass = (meta.row === meta.settings._iRecordsTotal - 1 || isLast === true) ? 'dtRowMoveDn disabled' : 'dtRowMoveDn';
 
                     newData += '<button class="btn btn-link text-decoration-none '+mvUpClass+'" title="'+api.i18n('buttons.moveUp', 'Move up')+'"></button>';
                     newData += '<button class="btn btn-link text-decoration-none '+mvDnClass+'" title="'+api.i18n('buttons.moveDn', 'Move down')+'"></button>';
@@ -154,13 +159,11 @@ jQuery.fn.dataTable.ext.buttons.delete = {
     },
     enabled: false,
     init: function ( dt , node, config ) {
-        var that = this;
+        let that = this;
 
         dt.on( 'draw.dt.DT select.dt.DT deselect.dt.DT', function () {
             if ( that.select.items() === 'row' ) {
-                that.enable(
-                    that.rows({selected: true}).count() === 0 ? false : true
-                );
+                that.enable(that.rows({selected: true}).count() !== 0);
             }
         });
     }
@@ -169,12 +172,11 @@ jQuery.fn.dataTable.ext.buttons.delete = {
 (function(window, document, $, undefined) {
 
     $.fn.dataTable.dataTableActionBtns = function ( inst ) {
-        var api = new $.fn.dataTable.Api( inst );
-        var buttons = api.init().dataTableActionBtns || ['create', 'delete'];
+        let api = new $.fn.dataTable.Api( inst );
 
-        var container = new $.fn.dataTable.Buttons( api, {
+        const container = new $.fn.dataTable.Buttons(api, {
             //    name: 'main',
-            buttons: buttons,
+            buttons: api.init().dataTableActionBtns || ['create', 'delete'],
         }).container();
 
         // API so the feature wrapper can return the node to insert
@@ -187,7 +189,7 @@ jQuery.fn.dataTable.ext.buttons.delete = {
     // Subscribe the feature plug-in to DataTables, ready for use
     $.fn.dataTable.ext.feature.push( {
         fnInit: function( settings ) {
-            var btn = new $.fn.dataTable.dataTableActionBtns( settings );
+            const btn = new $.fn.dataTable.dataTableActionBtns(settings);
             return btn.container();
         },
         cFeature: "b"
