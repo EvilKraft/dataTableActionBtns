@@ -1,7 +1,7 @@
 style = document.createElement('style');
 style.innerHTML = `
     .dtCreateBtn::before, .dtDeleteBtn::before, .dtRowUpdate::before, .dtRowDelete::before, .dtRowChild::before, .dtRowMoveUp::before, .dtRowMoveDn::before{
-        font-family: "Font Awesome 5 Free"; font-weight: 900; font-size: 1.33em; line-height: .75em; vertical-align: -.0667em;
+        font-family: "Font Awesome 5 Free"; font-weight: 900; font-size: 1.33em; 
     }
     
     .dtCreateBtn::before {content: "\\f067";}
