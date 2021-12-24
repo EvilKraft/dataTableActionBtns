@@ -1,21 +1,3 @@
-style = document.createElement('style');
-style.innerHTML = `
-    .dtCreateBtn::before, .dtDeleteBtn::before, .dtRowUpdate::before, .dtRowDelete::before, .dtRowChild::before, .dtRowMoveUp::before, .dtRowMoveDn::before{
-        font-family: "Font Awesome 5 Free"; font-weight: 900; font-size: 1.33em; 
-    }
-    
-    .dtCreateBtn::before {content: "\\f067";}
-    .dtDeleteBtn::before {content: "\\f1f8";}
-  
-    .dtRowUpdate::before {content: "\\f044"; font-weight: 400;}
-    .dtRowDelete::before {content: "\\f1f8";}
-    .dtRowChild::before  {content: "\\f067";}
-    .dtRowMoveUp::before {content: "\\f062";}
-    .dtRowMoveDn::before {content: "\\f063";}
-`;
-document.head.appendChild(style);
-
-
 function dtRowDelete(event) {
     event.preventDefault();
     $(event.target).closest('a').blur();
@@ -118,16 +100,16 @@ jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
         for (let i = 0; i < actions.length; ++i) {
             switch (actions[i]){
                 case 'create'    : break;
-                case 'update'    : newData += '<a href="'+url+'"     class="btn btn-link text-decoration-none text-primary dtRowUpdate" title="'+api.i18n('buttons.edit', 'Edit')+'"></a>';          break;
-                case 'delete'    : newData += '<button               class="btn btn-link text-decoration-none text-danger  dtRowDelete" title="'+api.i18n('buttons.delete', 'Delete')+'"></button>'; break;
-                case 'addChild'  : newData += '<a href="'+url+'/new" class="btn btn-link text-decoration-none text-success dtRowChild"  title="'+api.i18n('buttons.addChild', 'Add child')+'"></a>'; break;
+                case 'update'    : newData += '<a href="'+url+'"     class="btn btn-link text-decoration-none text-primary dtRowUpdate" title="'+api.i18n('buttons.edit', 'Edit')+'"><i class="far fa-edit"></i></a>';           break;
+                case 'delete'    : newData += '<button               class="btn btn-link text-decoration-none text-danger  dtRowDelete" title="'+api.i18n('buttons.delete', 'Delete')+'"><i class="fas fa-trash"></i></button>'; break;
+                case 'addChild'  : newData += '<a href="'+url+'/new" class="btn btn-link text-decoration-none text-success dtRowChild"  title="'+api.i18n('buttons.addChild', 'Add child')+'"><i class="fas fa-plus"></i></a>';  break;
 
                 case 'move'      :
                     const mvUpClass = (meta.row === 0 || isFirst === true)                               ? 'dtRowMoveUp disabled' : 'dtRowMoveUp';
                     const mvDnClass = (meta.row === meta.settings._iRecordsTotal - 1 || isLast === true) ? 'dtRowMoveDn disabled' : 'dtRowMoveDn';
 
-                    newData += '<button class="btn btn-link text-decoration-none '+mvUpClass+'" title="'+api.i18n('buttons.moveUp', 'Move up')+'"></button>';
-                    newData += '<button class="btn btn-link text-decoration-none '+mvDnClass+'" title="'+api.i18n('buttons.moveDn', 'Move down')+'"></button>';
+                    newData += '<button class="btn btn-link text-decoration-none '+mvUpClass+'" title="'+api.i18n('buttons.moveUp', 'Move up')+'"><i class="fas fa-arrow-up"></i></button>';
+                    newData += '<button class="btn btn-link text-decoration-none '+mvDnClass+'" title="'+api.i18n('buttons.moveDn', 'Move down')+'"><i class="fas fa-arrow-down"></i></button>';
 
                     break;
             }
@@ -138,7 +120,7 @@ jQuery.fn.dataTable.render.dataTableActionBtns = function ( actions ) {
 };
 
 jQuery.fn.dataTable.ext.buttons.create = {
-  //  text: '',
+    text: '<i class="fas fa-plus"></i>',
     titleAttr: function ( dt ) {
         return dt.i18n( 'buttons.create', 'Add new item');
     },
@@ -149,7 +131,7 @@ jQuery.fn.dataTable.ext.buttons.create = {
 };
 
 jQuery.fn.dataTable.ext.buttons.delete = {
-//    text: '',
+    text: '<i class="fas fa-trash"></i>',
     titleAttr: function ( dt ) {
         return dt.i18n( 'buttons.deleteItems', 'Delete items');
     },
