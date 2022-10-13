@@ -3,6 +3,7 @@ function dtRowDelete(event) {
     $(event.target).closest('a').blur();
 
     let row = $(event.target).closest('tr');
+
     let id  = row.attr('id').replace(/row_(.+)/, "$1");
     let api = $(event.delegateTarget).DataTable();
 
@@ -11,7 +12,7 @@ function dtRowDelete(event) {
             url: window.location.href+'/'+id,
             type: "DELETE",
             dataType: "json",
-        }).done(function(data, textStatus, jqXHR) {
+        }).done(function(data) {
             if(data.status === 1){
                 api.row(row).remove().draw();
 
@@ -82,23 +83,20 @@ function dtRowMove(event){
 
 jQuery.fn.dataTable.render.dataTableActionBtns = function (  ) {
     return function ( data, type, row, meta ) {
-        if(type !== 'display') {
-            return data;
-        }
-
-        if(meta.settings.bDrawing === false){
+        if(type !== 'display' || meta.settings.bDrawing === false) {
             return data;
         }
 
         const isFirst = meta.row === 0;
         const isLast  = meta.row === meta.settings.json.recordsTotal - 1;
-        const id      = data['pk'];
+        const id      = data['pk'] || row['DT_RowId'].replace(/row_(.+)/, "$1");
         const url     = window.location.href + '/' + id;
         const api     = new $.fn.dataTable.Api(meta.settings);
-        let newData = '';
+        const actions = api.init().dataTableActionBtns;
 
-        for (let i = 0; i < data['actions'].length; ++i) {
-            switch (data['actions'][i]){
+        let newData = '';
+        for (let i = 0; i < actions.length; ++i) {
+            switch (actions[i]){
                 case 'create'    : break;
                 case 'update'    : newData += '<a href="'+url+'"     class="btn btn-link text-decoration-none text-primary dtRowUpdate" title="'+api.i18n('buttons.edit', 'Edit')+'"><i class="far fa-edit"></i></a>';           break;
                 case 'delete'    : newData += '<button               class="btn btn-link text-decoration-none text-danger  dtRowDelete" title="'+api.i18n('buttons.delete', 'Delete')+'"><i class="fas fa-trash"></i></button>'; break;
