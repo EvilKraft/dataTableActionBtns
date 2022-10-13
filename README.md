@@ -17,8 +17,8 @@
 ```
 
 ## Options
-  create   - 'Create' button
-  update   - 'Update' button
-  delete   - 'Delete' button
-  move     - 'Move up' and 'Move down' buttons
-  addChild - 'Create child' button
+  - create   : 'Create' button
+  - update   : 'Update' button
+  - delete   : 'Delete' button
+  - move     : 'Move up' and 'Move down' buttons
+  - addChild : 'Create child' button
