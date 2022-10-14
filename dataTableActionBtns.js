@@ -1,10 +1,10 @@
 function dtRowDelete(event) {
     event.preventDefault();
-    $(event.target).closest('a').blur();
+    let btn = $(event.currentTarget);
+    btn.blur();
 
-    let row = $(event.target).closest('tr');
-
-    let id  = row.attr('id').replace(/row_(.+)/, "$1");
+    let id  = btn.data('pkey');
+    let row = $('#row_'+id);
     let api = $(event.delegateTarget).DataTable();
 
     if (confirm(api.i18n('buttons.rowDeleteConfirm', 'Are you sure you wont to delete this item?'))){
@@ -29,39 +29,43 @@ function dtRowDelete(event) {
 }
 
 function dtRowsDelete(event, dt, node, conf) {
-    let ids            = [];
-    let rows           = dt.rows('.selected');
-    const selected_ids = rows.ids();
+    let rows = dt.rows('.selected');
+    let ids  = rows.nodes().to$().map(function() {return $(this).data('pkey');}).get();
+//  let ids  = rows.ids().toArray().map(function(value) { return value.replace(/row_(.+)/, "$1"); });
 
-    for (let index = 0; index < selected_ids.length; ++index) {
-        ids.push(selected_ids[index].replace(/row_(.+)/, "$1"));
+    if(ids.length === 0){
+        return;
     }
 
-    if(ids.length > 0){
-        if(confirm(dt.i18n('buttons.rowsDeleteConfirm', 'Are you sure you wont to delete selected items?'))){
-            $.ajax({
-                url: window.location.href+"/"+ids.join(','),
-                type: "DELETE",
-                dataType: "json",
-            }).done(function(data, textStatus, jqXHR) {
-                if(data.status === 1){
-                    rows.remove().draw();
+    if(!confirm(dt.i18n('buttons.rowsDeleteConfirm', 'Are you sure you wont to delete selected items?'))){
+        return;
+    }
 
-                    appendAlert('success', dt.i18n('buttons.itemsDeleted', 'Items deleted'));
-                }else{
-                    data.errors.forEach(function(error, i, arr) {
-                        appendAlert('error', error.message);
-                    });
-                }
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                appendAlert('error', textStatus);
+    $.ajax({
+        url: window.location.href+"/"+ids.join(','),
+        type: "DELETE",
+        dataType: "json",
+    }).done(function(data, textStatus, jqXHR) {
+        if(data.status === 1){
+            rows.remove().draw();
+
+            appendAlert('success', dt.i18n('buttons.itemsDeleted', 'Items deleted'));
+        }else{
+            data.errors.forEach(function(error, i, arr) {
+                appendAlert('error', error.message);
             });
         }
-    }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        appendAlert('error', textStatus);
+    });
 }
 
 function dtRowMove(event){
-    const id = $(event.target).closest('tr').attr('id').replace(/row_(.+)/, "$1");
+    event.preventDefault();
+    let btn = $(event.currentTarget);
+    btn.blur();
+
+    const id  = btn.data('pkey');
 
     $.ajax({
         url: window.location.href+'/'+id+'/move',
@@ -82,32 +86,35 @@ function dtRowMove(event){
 }
 
 jQuery.fn.dataTable.render.dataTableActionBtns = function (  ) {
+    const className = "btn btn-link text-decoration-none";
+
     return function ( data, type, row, meta ) {
         if(type !== 'display' || meta.settings.bDrawing === false) {
             return data;
         }
 
-        const isFirst = meta.row === 0;
-        const isLast  = meta.row === meta.settings.json.recordsTotal - 1;
-        const id      = data['pk'] || row['DT_RowId'].replace(/row_(.+)/, "$1");
+        const id      = row['DT_RowData']['pkey'];
+//      const id      = row['DT_RowId'].replace(/row_(.+)/, "$1");
         const url     = window.location.href + '/' + id;
         const api     = new $.fn.dataTable.Api(meta.settings);
         const actions = api.init().dataTableActionBtns;
+        const isFirst = meta.row === 0;
+        const isLast  = meta.row === meta.settings.json.recordsTotal - 1;
 
         let newData = '';
         for (let i = 0; i < actions.length; ++i) {
             switch (actions[i]){
-                case 'create'    : break;
-                case 'update'    : newData += '<a href="'+url+'"     class="btn btn-link text-decoration-none text-primary dtRowUpdate" title="'+api.i18n('buttons.edit', 'Edit')+'"><i class="far fa-edit"></i></a>';           break;
-                case 'delete'    : newData += '<button               class="btn btn-link text-decoration-none text-danger  dtRowDelete" title="'+api.i18n('buttons.delete', 'Delete')+'"><i class="fas fa-trash"></i></button>'; break;
-                case 'addChild'  : newData += '<a href="'+url+'/new" class="btn btn-link text-decoration-none text-success dtRowChild"  title="'+api.i18n('buttons.addChild', 'Add child')+'"><i class="fas fa-plus"></i></a>';  break;
+                case 'create'   : break;
+                case 'update'   : newData += '<a      href="'+url+'"     class="'+className+' text-primary dtRowUpdate" title="'+api.i18n('buttons.edit', 'Edit')+'"><i class="far fa-edit"></i></a>';           break;
+                case 'delete'   : newData += '<button data-pkey="'+id+'" class="'+className+' text-danger  dtRowDelete" title="'+api.i18n('buttons.delete', 'Delete')+'"><i class="fas fa-trash"></i></button>'; break;
+                case 'addChild' : newData += '<a      href="'+url+'/new" class="'+className+' text-success dtRowChild"  title="'+api.i18n('buttons.addChild', 'Add child')+'"><i class="fas fa-plus"></i></a>';  break;
 
-                case 'move'      :
-                    const mvUpClass = (meta.row === 0 || isFirst === true)                               ? 'dtRowMoveUp disabled' : 'dtRowMoveUp';
-                    const mvDnClass = (meta.row === meta.settings._iRecordsTotal - 1 || isLast === true) ? 'dtRowMoveDn disabled' : 'dtRowMoveDn';
+                case 'move'     :
+                    const mvUpDisabled = (isFirst) ? ' disabled' : '';
+                    const mvDnDisabled = (isLast)  ? ' disabled' : '';
 
-                    newData += '<button class="btn btn-link text-decoration-none '+mvUpClass+'" title="'+api.i18n('buttons.moveUp', 'Move up')+'"><i class="fas fa-arrow-up"></i></button>';
-                    newData += '<button class="btn btn-link text-decoration-none '+mvDnClass+'" title="'+api.i18n('buttons.moveDn', 'Move down')+'"><i class="fas fa-arrow-down"></i></button>';
+                    newData += '<button data-pkey="'+id+'" class="'+className+' dtRowMoveUp '+mvUpDisabled+'" title="'+api.i18n('buttons.moveUp', 'Move up')+'"><i class="fas fa-arrow-up"></i></button>';
+                    newData += '<button data-pkey="'+id+'" class="'+className+' dtRowMoveDn '+mvDnDisabled+'" title="'+api.i18n('buttons.moveDn', 'Move down')+'"><i class="fas fa-arrow-down"></i></button>';
 
                     break;
             }
@@ -177,8 +184,8 @@ jQuery.fn.dataTable.ext.buttons.delete = {
 
 })(window, document, jQuery);
 
-$(document).on( 'init.dt', function ( e, settings ) {
+$(document).on( 'init.dt', function(e){
     $(e.target).on('click', '.dtRowDelete', dtRowDelete);
     $(e.target).on('click', '.dtRowMoveUp', {direction: 'up'}, dtRowMove);
     $(e.target).on('click', '.dtRowMoveDn', {direction: 'dn'}, dtRowMove);
-} );
+});
